@@ -28,12 +28,15 @@ public class UsuarioDaoImpl implements UsuarioDao {
     @Override
     public int create(Usuario user) {
         int x = 0;
-        String SQL="Insert into usuarios(username, password,) values(?,?)";
+        String SQL="Insert into usuarios(username, password, idpersona, idrol, fechacreacion, estado) values(?,?,?,?,now(),true)";
         try {
             cx = Conexion.getConexion();
             ps = cx.prepareStatement(SQL);
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
+            ps.setInt(3, user.getIdpersona());
+            ps.setInt(4, user.getIdrol());
+
             x = ps.executeUpdate();
         } catch (SQLException e){
             System.out.println("Error: "+e);
@@ -44,13 +47,14 @@ public class UsuarioDaoImpl implements UsuarioDao {
     @Override
     public int update(Usuario user) {
         int x = 0;
-        String SQL="update usuarios set username=?, password=? where idusuario=?";
+        String SQL="update usuarios set username=?, password=?, idrol=? where idusuario=?";
         try {
             cx = Conexion.getConexion();
             ps = cx.prepareStatement(SQL);
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
-            ps.setInt(3, user.getIdusuario());
+            ps.setInt(3, user.getIdrol());
+            ps.setInt(4, user.getIdusuario());
             x = ps.executeUpdate();
         } catch (SQLException e){
             System.out.println("Error: "+e);
@@ -76,7 +80,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
     @Override
     public Usuario read(int id) {
         Usuario p = new Usuario();
-        String SQL ="select *from where idusuario=?"; 
+        String SQL ="select *from usuarios where idusuario=?"; 
         try {
             cx = Conexion.getConexion();
             ps = cx.prepareStatement(SQL);
@@ -104,7 +108,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
                 Usuario p = new Usuario();
                 p.setIdusuario(rs.getInt("idusuario"));
                 p.setUsername(rs.getString("username"));
-                p.setPassword(rs.getString("pasword"));
+                p.setIdpersona(rs.getInt("idpersona"));
+                p.setIdrol(rs.getInt("idrol"));
                 lista.add(p);
             }
         } catch (SQLException e) {
@@ -114,29 +119,5 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return lista;
     }
 
-    @Override
-    public List<Map<String, Object>> readAll2() {     
-        List<Map<String, Object>> lista = new ArrayList<>();
-        String SQL = "select u.idusuario, u.username, p.apellidos, p.nombres, r.nombre from usuarios as u " +
-                     "inner join roles as r on u.idrol = r.idrol " +
-                     "inner join personas as p on u.idpersona =p.idpersona";
-        try {
-            cx = Conexion.getConexion();
-            ps = cx.prepareStatement(SQL);
-            rs = ps.executeQuery();
-            while(rs.next()){
-                Map<String, Object> map = new HashMap<>();
-                map.put("idusuario",rs.getInt("idusuario"));
-                map.put("username",rs.getString("username"));
-                map.put("apellidos",rs.getString("apellidos"));
-                map.put("nombres",rs.getString("nombres"));
-                map.put("rol",rs.getString("nombre"));
-                lista.add(map);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error: "+e);
-        }
-        return lista;
-    }
-    
+ 
 }

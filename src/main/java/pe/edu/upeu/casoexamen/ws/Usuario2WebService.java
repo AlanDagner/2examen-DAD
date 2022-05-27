@@ -26,9 +26,33 @@ public class Usuario2WebService {
     /**
      * This is a sample web service operation
      */
-    @WebMethod(operationName = "hello")
-    public String hello(@WebParam(name = "name") String txt) {
-        return "Hello " + txt + " !";
+    @WebMethod(operationName = "create")
+    public int create (@WebParam(name = "username") String username, @WebParam(name = "password") String password, @WebParam(name = "idpersona") int idpersona, @WebParam(name = "idrol") int idrol, @WebParam(name = "fechacreacion") String fechacreacion, @WebParam(name = "estado") boolean estado) {
+        return udao.create(new Usuario(0,username,password,idpersona,idrol,fechacreacion,estado));
     }
+    
+    @WebMethod(operationName = "update")
+    public int update(@WebParam(name = "idusuario") int idusuario, @WebParam(name = "username") String username, @WebParam(name = "password") String password, @WebParam(name = "idrol") int idrol, @WebParam(name = "idpersona") int idpersona, @WebParam(name = "fechacreacion") String fechacreacion, @WebParam(name = "estado") boolean estado) {
+        //TODO write your implementation code here:
+        return udao.update(new Usuario(idusuario,username,password,idrol,idpersona,fechacreacion,estado));
+    }
+    
+    @WebMethod(operationName = "delete")
+    public int delete(@WebParam(name = "idusuario") int idusuario){
+        return udao.delete(idusuario);
+    }
+    
+    @WebMethod(operationName = "read")
+    public Usuario read(@WebParam(name = "id") int idusuario) {
+        //TODO write your implementation code here:
+        return udao.read(idusuario);
+    }
+    
+    @WebMethod(operationName = "readAll")
+    public List<Usuario> readAll() {
+        //TODO write your implementation code here:
+        return udao.readAll();
+    }
+
     
 }

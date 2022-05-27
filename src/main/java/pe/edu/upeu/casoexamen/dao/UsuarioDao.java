@@ -5,7 +5,6 @@
 package pe.edu.upeu.casoexamen.dao;
 
 import java.util.List;
-import java.util.Map;
 import pe.edu.upeu.casoexamen.model.Usuario;
 /**
  *
@@ -17,5 +16,4 @@ public interface UsuarioDao {
     int delete(int id);
     Usuario read(int id);
     List<Usuario>readAll();
-    List<Map<String,Object>>readAll2();
 }
